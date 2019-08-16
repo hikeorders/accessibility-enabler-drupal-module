@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * @file
+ *   The official Crazy Egg Plugin for Drupal.
+ *   The easiest, free way to add your Crazy Egg tracking script to your Drupal site.
+ *   See https://www.a11yenabler.com for details.
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function a11yenabler_permission() {
+  return array(
+    'administer accessibility enabler' => array(
+      'title' => t('Administer Accessibility Enabler'),
+      'description' => t('Administer account settings and visibility of Accessibility Enabler on your site.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function a11yenabler_menu() {
+  $items['admin/config/system/a11yenabler'] = array(
+    'title' => 'Accessibility Enabler',
+    'description' => 'Configure Accessibility Enabler on your website.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('a11yenabler_admin_settings_form'),
+    'access arguments' => array('administer Accessibility Enabler'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'includes/admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_help().
+ */
+function a11yenabler_help($path, $arg) {
+  switch ($path) {
+    case 'admin/config/system/a11yenabler':
+      return t('<img src="@logo" style="float: right;width:250px;" alt="Accessibility Enabler" />'
+          . '<a href="@url">Accessibility Enabler</a> helps to increase sales with disability friendly site.',
+          array(
+              '@url' => 'https://hikeorders.com/accessibility/home/',
+              '@logo' => 'https://app.a11y.hikeorders.com/bundles/orocrm/images/LogoWIthText.png'
+          )
+      );
+  }
+}
+
+/**
+ * Implements hook_page_alter()
+ */
+function a11yenabler_page_alter(&$page) {
+  $org_id = variable_get('a11yenabler_org_id', '');
+
+    $is_page_allowed =  showOnCurrentPage();
+
+
+  if ( $org_id && $is_page_allowed ) {
+
+    $script_path = 'https://jsappcdn.hikeorders.com/main/assets/js/hko-accessibility.min.js?orgId=' . $org_id ;
+
+    drupal_add_js($script_path, array(
+        'type' => 'external',
+        'scope' => "header",
+        'weight' => 0,
+        'defer' => TRUE,
+    ));
+  }
+}
+
+function showOnCurrentPage() {
+
+    if (path_is_admin(current_path())) {
+        return false;
+    }
+    return true;
+
+}

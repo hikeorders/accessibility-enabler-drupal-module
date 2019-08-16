@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update functions for Accessibility Enabler.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function a11yenabler_uninstall() {
+  $variables = array(
+    'a11yenabler_org_id',
+  );
+
+  // Delete all a11yenabler variables.
+  foreach ($variables as $var) {
+    variable_del($var);
+  }
+}
