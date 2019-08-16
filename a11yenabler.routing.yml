@@ -1,0 +1,7 @@
+a11yenabler.config:
+  path: '/admin/config/system/a11yenabler'
+  defaults:
+    _title: 'Accessibility Enabler'
+    _form: '\Drupal\a11yenabler\Form\A11yEnablerSettingsForm'
+  requirements:
+    _permission: 'administer accessibility enabler'

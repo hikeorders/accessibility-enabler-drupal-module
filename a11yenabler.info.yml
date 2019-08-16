@@ -1,0 +1,10 @@
+name: 'Accessibility Enabler '
+description: 'The official Accessibility Enabler Plugin for Joomla. It helps to increase sales with disability friendly site.'
+# core: 8.x
+type: module
+
+# Information added by Drupal.org packaging script on 2019-03-07
+version: '8.x-1.1'
+core: '8.x'
+project: 'a11yenabler'
+datestamp: 1551961491

@@ -1,0 +1,5 @@
+a11yenabler.config:
+  title: 'Accessibility Enabler'
+  description: 'Configure Accessibility Enabler on your website.'
+  parent: system.admin_config_system
+  route_name: a11yenabler.config

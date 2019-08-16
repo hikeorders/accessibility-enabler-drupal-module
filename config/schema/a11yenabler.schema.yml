@@ -1,0 +1,7 @@
+a11yenabler.settings:
+  type: mapping
+  label: 'Settings'
+  mapping:
+    a11yenabler_orgId:
+      type: text
+

@@ -1,0 +1,108 @@
+<?php
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+use Drupal\user\Entity\User;
+
+/**
+ * Implements hook_permission().
+ */
+function a11yenabler_permission() {
+  return [
+    'administer accessibility enabler' => [
+      'title' => t('Administer Accessibility Enabler'),
+      'description' => t('Administer account settings and visibility of Accessibility Enabler on your site.'),
+    ],
+  ];
+}
+
+/**
+ * Implements hook_help().
+ */
+function a11yenabler_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.a11yenabler':
+      return
+        t('<img src="@logo" style="float: right;width: 250px;" alt="Accessibility  Enabler">'
+          . '<strong>Accessibility Enabler</strong> helps to increase sales with disability friendly site. <br/><br/>'
+          . 'Drupal module repository: <a href="@module_url">www.drupal.org/project/a11yenabler</a><br/>'
+          . 'Official website: <a href="@ce_url">https://hikeorders.com/accessibility/home/</a><br/>'
+          . 'Support: <a href="mailto:@support_email">team@hikeorders.com</a><br/><br/><hr/><br/>',
+          [
+            '@ce_url' => 'https://hikeorders.com/accessibility/home/',
+            '@module_url' => 'https://www.drupal.org/project/a11yenabler',
+            '@support_email' => 'team@hikeorders.com',
+            '@logo' => 'https://hikeorders.com/wp-content/uploads/2019/01/AccessibilityEnablerLogo.png'
+          ]
+        );
+  }
+}
+
+/**
+ * Implements hook_library_info_build().
+ */
+function a11yenabler_library_info_build() {
+  $libs = [
+    'a11yenabler' => [],
+  ];
+
+  $orgID = getOrgId();
+
+  if (empty($orgID) == false) {
+    $libs['a11yenabler'] = [
+      'header' => true,
+      'js' => [
+          'https://jsappcdn.hikeorders.com/main/assets/js/hko-accessibility.min.js?orgId=' . $orgID  => [
+          'type' => 'external',
+          'minified' => TRUE,
+          'weight' => 0,
+          'attributes' => [
+            'async' => TRUE,
+          ],
+        ]
+      ],
+    ];
+  }
+
+
+  return $libs;
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function a11yenabler_page_attachments(array &$attachments) {
+
+
+    $orgId = getOrgId();
+
+    $is_page_allowed =  showOnCurrentPage();
+
+    if($orgId && $is_page_allowed) {
+        $attachments['#attached']['library'][] = 'a11yenabler/a11yenabler';
+    }
+
+
+
+}
+
+function showOnCurrentPage() {
+
+    if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+       return false;
+    }
+    return true;
+
+}
+
+function getOrgId() {
+  $orgId = \Drupal::config('a11yenabler.settings')->get('a11yenabler_orgId');
+
+  if(empty($orgId) == false ) {
+       return $orgId;
+  }
+
+  return FALSE;
+}
+
+
